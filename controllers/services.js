@@ -18,6 +18,7 @@ exports.getServices = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Service.find()
+        .sort({ title: 1 })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
@@ -80,6 +81,7 @@ exports.findServices = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Service.find(expressionArray)
+        .sort({ title: 1 })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
