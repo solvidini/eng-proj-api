@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
 const productsRoutes = require('./routes/products');
+const servicesRoutes = require('./routes/services');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/products', productsRoutes);
+app.use('/services', servicesRoutes);
 
 app.use((error, req, res, next) => {
   //error handler

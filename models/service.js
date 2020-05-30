@@ -1,24 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const productSchema = new Schema(
+const serviceSchema = new Schema(
   {
     title: {
       type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
     },
     company: {
-      type: String,
-      required: true,
-    },
-    category: {
-      type: String,
-      required: true,
-    },
-    path: {
-      type: String,
-      required: true,
-    },
-    uri: {
       type: String,
       required: true,
     },
@@ -26,7 +19,14 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
+    uri: {
+      type: String,
+      required: true,
+    },
+    path: {
+      type: String,
+    },
+    category: {
       type: String,
     },
   },
@@ -35,4 +35,4 @@ const productSchema = new Schema(
   }
 );
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = mongoose.model('Service', serviceSchema);

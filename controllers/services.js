@@ -1,6 +1,6 @@
-const Product = require('../models/product');
+const Service = require('../models/service');
 
-exports.getProducts = (req, res, next) => {
+exports.getServices = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = req.body.perPage || 5;
   let totalItems;
@@ -13,18 +13,18 @@ exports.getProducts = (req, res, next) => {
     throw error;
   }
 
-  Product.find()
+  Service.find()
     .countDocuments()
     .then((count) => {
       totalItems = count;
-      return Product.find()
+      return Service.find()
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
-    .then((products) => {
+    .then((services) => {
       res.status(200).json({
-        message: 'Fetched products successfully.',
-        products: products,
+        message: 'Fetched services successfully.',
+        services: services,
         totalItems: totalItems,
       });
     })
@@ -36,7 +36,7 @@ exports.getProducts = (req, res, next) => {
     });
 };
 
-exports.findProducts = (req, res, next) => {
+exports.findServices = (req, res, next) => {
   const currentPage = req.query.page || 1;
   const perPage = req.body.perPage || 5;
   let expression = req.body.expression;
@@ -75,18 +75,18 @@ exports.findProducts = (req, res, next) => {
 
   console.log(expressionArray);
 
-  Product.find(expressionArray)
+  Service.find(expressionArray)
     .countDocuments()
     .then((count) => {
       totalItems = count;
-      return Product.find(expressionArray)
+      return Service.find(expressionArray)
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
-    .then((products) => {
+    .then((services) => {
       res.status(200).json({
-        message: 'Fetched found products successfully.',
-        products: products,
+        message: 'Fetched found services successfully.',
+        services: services,
         totalItems: totalItems,
       });
     })
