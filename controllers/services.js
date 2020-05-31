@@ -62,14 +62,26 @@ exports.findServices = (req, res, next) => {
   let expressionArray = expression.split(' ');
 
   expressionArray = expressionArray.map((exp) => {
-    return {
-      $or: [
-        { title: new RegExp(exp, 'gi') },
-        { company: new RegExp(exp, 'gi') },
-        { category: new RegExp(exp, 'gi') },
-        { description: new RegExp(exp, 'gi') },
-      ],
-    };
+    if (/\*$/gi.test(exp)) {
+      exp = exp.replace('*', '');
+      return {
+        $or: [
+          { title: new RegExp(['^', exp, '$'].join(''), 'i') },
+          { company: new RegExp(['^', exp, '$'].join(''), 'i') },
+          { category: new RegExp(['^', exp, '$'].join(''), 'i') },
+          { description: new RegExp(['^', exp, '$'].join(''), 'i') },
+        ],
+      };
+    } else {
+      return {
+        $or: [
+          { title: new RegExp(exp, 'gi') },
+          { company: new RegExp(exp, 'gi') },
+          { category: new RegExp(exp, 'gi') },
+          { description: new RegExp(exp, 'gi') },
+        ],
+      };
+    }
   });
 
   expressionArray = { $and: expressionArray };
