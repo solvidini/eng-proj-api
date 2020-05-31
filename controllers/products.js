@@ -59,17 +59,22 @@ exports.findProducts = (req, res, next) => {
 
   expression = expression.replace(/(^\s+)|(\s+$)/g, '');
   expression = expression.replace(/(\s\s+)/g, ' ');
+  expression = expression.replace(
+    /[^0-9a-zA-Z*ĄĆĘŁŃÓŚŹŻąćęłńóśźż\s]+/g,
+    ''
+  );
   let expressionArray = expression.split(' ');
 
   expressionArray = expressionArray.map((exp) => {
     if (/\*$/gi.test(exp)) {
       exp = exp.replace('*', '');
+      console.log(new RegExp(['^', exp, '$'].join(''), 'i'));
       return {
         $or: [
-          { title: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { company: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { category: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { description: new RegExp(['^', exp, '$'].join(''), 'i') },
+          { title: new RegExp(['^', exp, '$'].join(''), 'gi') },
+          { company: new RegExp(['^', exp, '$'].join(''), 'gi') },
+          { category: new RegExp(['^', exp, '$'].join(''), 'gi') },
+          { description: new RegExp(['^', exp, '$'].join(''), 'gi') },
         ],
       };
     } else {
