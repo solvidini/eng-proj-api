@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const productSchema = new Schema(
   {
+    scrapeID: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
     },

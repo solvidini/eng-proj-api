@@ -3,6 +3,10 @@ const Schema = mongoose.Schema;
 
 const serviceSchema = new Schema(
   {
+    scrapeID: {
+      type: String,
+      required: true,
+    },
     title: {
       type: String,
       required: true,
@@ -21,7 +25,6 @@ const serviceSchema = new Schema(
     },
     uri: {
       type: String,
-      required: true,
     },
     path: {
       type: String,
