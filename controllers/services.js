@@ -2,8 +2,16 @@ const Service = require('../models/service');
 
 exports.getServices = (req, res, next) => {
   const currentPage = req.query.page || 1;
-  const perPage = req.body.perPage || 5;
+  let perPage = req.body.perPage || 5;
   let totalItems;
+
+  if (!Number.isInteger(perPage)) {
+    perPage.replace(/[^0-9]/g, '');
+    perPage = Number(perPage);
+  }
+  if (!(perPage > 0 && perPage <= 30)) {
+    perPage = 5;
+  }
 
   if (currentPage < 1) {
     const error = new Error(
@@ -39,9 +47,17 @@ exports.getServices = (req, res, next) => {
 
 exports.findServices = (req, res, next) => {
   const currentPage = req.query.page || 1;
-  const perPage = req.body.perPage || 5;
+  let perPage = req.body.perPage || 5;
   let expression = req.body.expression;
   let totalItems;
+
+  if (!Number.isInteger(perPage)) {
+    perPage.replace(/[^0-9]/g, '');
+    perPage = Number(perPage);
+  }
+  if (!(perPage > 0 && perPage <= 30)) {
+    perPage = 5;
+  }
 
   if (currentPage < 1) {
     const error = new Error(
