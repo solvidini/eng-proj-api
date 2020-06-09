@@ -2,7 +2,7 @@ const Service = require('../models/service');
 
 exports.getServices = (req, res, next) => {
   const currentPage = req.query.page || 1;
-  let perPage = req.body.perPage || 5;
+  let perPage = req.query.perPage || 5;
   let totalItems;
 
   if (!Number.isInteger(perPage)) {
@@ -75,20 +75,35 @@ exports.findServices = (req, res, next) => {
 
   expression = expression.replace(/(^\s+)|(\s+$)/g, '');
   expression = expression.replace(/(\s\s+)/g, ' ');
+  expression = expression.replace(
+    /[^0-9a-zA-Z*ĄĆĘŁŃÓŚŹŻąćęłńóśźż\s]+/g,
+    ''
+  );
   let expressionArray = expression.split(' ');
 
   expressionArray = expressionArray.map((exp) => {
     if (/\*$/gi.test(exp)) {
       exp = exp.replace('*', '');
+      console.log(new RegExp(['^', exp, '$'].join(''), 'i'));
       return {
         $or: [
-          { title: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { company: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { category: new RegExp(['^', exp, '$'].join(''), 'i') },
-          { description: new RegExp(['^', exp, '$'].join(''), 'i') },
+          { title: new RegExp(['^', exp, '$'].join(''), 'gi') },
+          { company: new RegExp(['^', exp, '$'].join(''), 'gi') },
+          { category: new RegExp(exp, 'gi') },
+          { description: new RegExp(['^', exp, '$'].join(''), 'gi') },
         ],
       };
     } else {
+      if (
+        exp.length > 2 &&
+        (exp.slice(exp.length - 1, exp.length) === 'a' ||
+          exp.slice(exp.length - 1, exp.length) === 'e' ||
+          exp.slice(exp.length - 1, exp.length) === 'i' ||
+          exp.slice(exp.length - 1, exp.length) === 'y' ||
+          exp.slice(exp.length - 1, exp.length) === 'o')
+      ) {
+        exp = exp.slice(0, -1);
+      }
       return {
         $or: [
           { title: new RegExp(exp, 'gi') },

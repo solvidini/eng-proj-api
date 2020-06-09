@@ -2,7 +2,7 @@ const Product = require('../models/product');
 
 exports.getProducts = (req, res, next) => {
   const currentPage = req.query.page || 1;
-  let perPage = req.body.perPage || 5;
+  let perPage = req.query.perPage || 5;
   let totalItems;
 
   if (!Number.isInteger(perPage)) {
@@ -26,7 +26,7 @@ exports.getProducts = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Product.find()
-        .sort({ title: 1 })
+        .sort({ category: 1 })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
@@ -124,7 +124,7 @@ exports.findProducts = (req, res, next) => {
     .then((count) => {
       totalItems = count;
       return Product.find(expressionArray)
-        .sort({ title: 1 })
+        .sort({ category: 1 })
         .skip((currentPage - 1) * perPage)
         .limit(perPage);
     })
@@ -133,7 +133,6 @@ exports.findProducts = (req, res, next) => {
         message: 'Fetched found products successfully.',
         products: products,
         totalItems: totalItems,
-        perPage: perPage,
       });
     })
     .catch((err) => {
