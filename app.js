@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
+const errorHandler = require('./utils/errorHandler');
 const productsRoutes = require('./routes/products');
 const servicesRoutes = require('./routes/services');
 
@@ -26,10 +27,9 @@ app.use('/services', servicesRoutes);
 
 app.use((error, req, res, next) => {
   //error handler
-  console.log(error);
-  const status = error.statusCode || 500;
-  const message = error.message;
-  res.status(status).json({ message: message });
+  error.statusCode = error.statusCode || 500;
+  errorHandler(error);
+  res.status(error.statusCode).json({ message: error.message });
 });
 
 mongoose
