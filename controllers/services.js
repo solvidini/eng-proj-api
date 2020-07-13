@@ -80,12 +80,12 @@ exports.findServices = (req, res, next) => {
   //remove redundant spaces
   expression = expression.replace(/(\s\s+)/g, ' ');
   expression = expression.replace(/(^\s+)|(\s+$)|(,\s)|(\s,)/g, ',');
-  //remove redundant *
-  expression = expression.replace(/(^\*+)|(\*+$)/g, '');
-  expression = expression.replace(/(\*\*+)/g, '*');
   //remove redundant ,
   expression = expression.replace(/(^,+)|(,+$)/g, '');
   expression = expression.replace(/(,,+)/g, ',');
+  //remove redundant *
+  expression = expression.replace(/(^\*+)/g, '');
+  expression = expression.replace(/(\*\*+)/g, '*');
 
   let expressionArray = expression.split(',');
 
