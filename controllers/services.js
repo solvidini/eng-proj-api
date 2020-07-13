@@ -73,13 +73,21 @@ exports.findServices = (req, res, next) => {
   }
   expression = String(expression);
 
-  expression = expression.replace(/(^\s+)|(\s+$)/g, '');
-  expression = expression.replace(/(\s\s+)/g, ' ');
   expression = expression.replace(
-    /[^0-9a-zA-Z*ĄĆĘŁŃÓŚŹŻąćęłńóśźż\s]+/g,
+    /[^,0-9a-zA-Z*ĄĆĘŁŃÓŚŹŻąćęłńóśźż\s]+/g,
     ''
   );
-  let expressionArray = expression.split(' ');
+  //remove redundant spaces
+  expression = expression.replace(/(\s\s+)/g, ' ');
+  expression = expression.replace(/(^\s+)|(\s+$)|(,\s)|(\s,)/g, ',');
+  //remove redundant *
+  expression = expression.replace(/(^\*+)|(\*+$)/g, '');
+  expression = expression.replace(/(\*\*+)/g, '*');
+  //remove redundant ,
+  expression = expression.replace(/(^,+)|(,+$)/g, '');
+  expression = expression.replace(/(,,+)/g, ',');
+
+  let expressionArray = expression.split(',');
 
   expressionArray = expressionArray.map((exp) => {
     if (/\*$/gi.test(exp)) {
@@ -97,8 +105,8 @@ exports.findServices = (req, res, next) => {
       if (
         exp.length > 2 &&
         (exp.slice(exp.length - 1, exp.length) === 'a' ||
-          exp.slice(exp.length - 1, exp.length) === 'e' ||
           exp.slice(exp.length - 1, exp.length) === 'i' ||
+          exp.slice(exp.length - 1, exp.length) === 'e' ||
           exp.slice(exp.length - 1, exp.length) === 'y' ||
           exp.slice(exp.length - 1, exp.length) === 'o')
       ) {
