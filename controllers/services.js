@@ -1,7 +1,7 @@
 const Service = require('../models/service');
 
 exports.getServices = (req, res, next) => {
-  const currentPage = req.query.page || 1;
+  const currentPage = +req.query.page || 1;
   let perPage = req.query.perPage || 5;
   let totalItems;
 
@@ -46,7 +46,7 @@ exports.getServices = (req, res, next) => {
 };
 
 exports.findServices = (req, res, next) => {
-  const currentPage = req.query.page || 1;
+  const currentPage = +req.query.page || 1;
   let perPage = req.body.perPage || 5;
   let expression = req.body.expression;
   let totalItems;
