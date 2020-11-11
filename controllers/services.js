@@ -2,7 +2,7 @@ const Service = require('../models/service');
 const searchExpressionGenerator = require('../utils/searchExpressionGenerator');
 
 exports.getServices = (req, res, next) => {
-   let currentPage = +req.query.page || 1;
+   let currentPage = +req.params.pageNumber || 1;
    let perPage = 5;
    let totalItems;
 
@@ -43,7 +43,7 @@ exports.getServices = (req, res, next) => {
 };
 
 exports.findServices = (req, res, next) => {
-   let currentPage = +req.query.page || 1;
+   let currentPage = +req.params.pageNumber || 1;
    let perPage = req.body.perPage || 5;
    let expression = req.body.expression;
    let totalItems;
