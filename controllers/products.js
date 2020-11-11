@@ -2,7 +2,7 @@ const Product = require('../models/product');
 const searchExpressionGenerator = require('../utils/searchExpressionGenerator');
 
 exports.getProducts = (req, res, next) => {
-   const currentPage = +req.query.page || 1;
+   let currentPage = +req.params.pageNumber || 1;
    let perPage = 5;
    let totalItems;
 
@@ -11,11 +11,15 @@ exports.getProducts = (req, res, next) => {
       error.statusCode = 422;
       throw error;
    }
+   currentPage = Math.abs(currentPage);
 
    Product.find()
       .countDocuments()
       .then((count) => {
          totalItems = count;
+         if (currentPage > Math.ceil(totalItems / perPage)) {
+            currentPage = Math.ceil(totalItems / perPage) || 1;
+         }
          return Product.find()
             .sort({ category: 1 })
             .skip((currentPage - 1) * perPage)
@@ -39,7 +43,7 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.findProducts = (req, res, next) => {
-   const currentPage = +req.query.page || 1;
+   let currentPage = +req.params.pageNumber || 1;
    let perPage = req.body.perPage || 5;
    let expression = req.body.expression;
    let totalItems;
@@ -56,6 +60,7 @@ exports.findProducts = (req, res, next) => {
       error.statusCode = 422;
       throw error;
    }
+   currentPage = Math.abs(currentPage);
 
    const expressionArray = searchExpressionGenerator(expression);
 
@@ -63,6 +68,9 @@ exports.findProducts = (req, res, next) => {
       .countDocuments()
       .then((count) => {
          totalItems = count;
+         if (currentPage > Math.ceil(totalItems / perPage)) {
+            currentPage = Math.ceil(totalItems / perPage) || 1;
+         }
          return Product.find(expressionArray)
             .sort({ category: 1 })
             .skip((currentPage - 1) * perPage)
