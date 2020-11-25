@@ -1,5 +1,5 @@
 const Service = require('../models/service');
-const searchExpressionGenerator = require('../utils/searchExpressionGenerator');
+const generateRegExpBasedQuery = require('../utils/generateRegExpBasedQuery');
 
 exports.getServices = (req, res, next) => {
    let currentPage = +req.params.pageNumber || 1;
@@ -62,16 +62,16 @@ exports.findServices = (req, res, next) => {
    }
    currentPage = Math.abs(currentPage);
 
-   const expressionArray = searchExpressionGenerator(expression);
+   const regExpBasedQuery = generateRegExpBasedQuery(expression);
 
-   Service.find(expressionArray)
+   Service.find(regExpBasedQuery)
       .countDocuments()
       .then((count) => {
          totalItems = count;
          if (currentPage > Math.ceil(totalItems / perPage)) {
             currentPage = Math.ceil(totalItems / perPage) || 1;
          }
-         return Service.find(expressionArray)
+         return Service.find(regExpBasedQuery)
             .sort({ title: 1 })
             .skip((currentPage - 1) * perPage)
             .limit(perPage);

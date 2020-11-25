@@ -5,6 +5,7 @@ module.exports = (expression) => {
       throw error;
    }
    expression = String(expression);
+   //remove forbidden symbols
    expression = expression.replace(/[^,0-9a-zA-Z\-\_ĄĆĘŁŃÓŚŹŻąćęłńóśźż\s]+/g, '');
    //remove redundant spaces
    expression = expression.replace(/(\s\s+)/g, ' ');
@@ -16,9 +17,9 @@ module.exports = (expression) => {
    expression = expression.replace(/(^\*+)/g, '');
    expression = expression.replace(/(\*\*+)/g, '*');
 
-   let expressionArray = expression.split(',');
+   const expressionArray = expression.split(',');
 
-   expressionArray = expressionArray.map((exp) => {
+   const regExpQueryArray = expressionArray.map((exp) => {
       if (/\*$/gi.test(exp)) {
          exp = exp.replace('*', '');
          return {
@@ -51,5 +52,5 @@ module.exports = (expression) => {
       }
    });
 
-   return { $and: expressionArray };
+   return { $and: regExpQueryArray };
 };
