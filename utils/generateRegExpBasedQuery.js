@@ -1,3 +1,19 @@
+const toRegex = require('diacritic-regex').toRegex;
+
+const regexSettings = {
+   flags: 'gi',
+   mappings: {
+      a: 'aą',
+      c: 'cć',
+      e: 'eę',
+      l: 'lł',
+      n: 'nń',
+      o: 'oó',
+      s: 'sś',
+      z: 'zżź',
+   },
+};
+
 module.exports = (expression) => {
    if (typeof expression === 'undefined' || expression === null) {
       const error = new Error('To find items expression must be set.');
@@ -40,10 +56,10 @@ module.exports = (expression) => {
          }
          return {
             $or: [
-               { title: new RegExp(exp, 'gi') },
-               { company: new RegExp(exp, 'gi') },
-               { category: new RegExp(exp, 'gi') },
-               { description: new RegExp(exp, 'gi') },
+               { title: toRegex(regexSettings)(exp) },
+               { company: toRegex(regexSettings)(exp) },
+               { category: toRegex(regexSettings)(exp) },
+               { description: toRegex(regexSettings)(exp) },
             ],
          };
       }
